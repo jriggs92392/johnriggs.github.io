@@ -1,0 +1,11 @@
+[
+    { "id": 1,  "name": "Footballs",   "icon": "football",   "price": 9.99},
+    { "id": 2,  "name": "Helmets",     "icon": "helmet",     "price": 149.99},
+    { "id": 3,  "name": "Pads",        "icon": "pad",        "price": 199.99},
+    { "id": 5,  "name": "Baseballs",   "icon": "baseball",   "price": 3.99},
+    { "id": 6,  "name": "Bats",        "icon": "bat",        "price": 29.99},
+    { "id": 7,  "name": "Gloves",      "icon": "glove",      "price": 19.99},
+    { "id": 8,  "name": "Basketballs", "icon": "basketball", "price": 19.99},
+    { "id": 9,  "name": "Jerseys",     "icon": "jersey",     "price": 14.99},
+    { "id": 9,  "name": "Hoops",       "icon": "hoop",       "price": 149.99}
+  ]

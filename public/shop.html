@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="shopstyle.css">
+        <title>Sports Shop</title>
+
+        <script>
+          const quantity = ref(0)
+        </script>
+    </head>
+    <body>
+        <div id="app">
+          <header class="top-bar spread">
+            <nav class="top-bar-nav">
+              <a href="../shop.html" class="top-bar-link">
+                <span>Home</span>
+              </a>
+              <a href="past_orders.html" class="top-bar-link">
+                <span>Past Orders</span>
+              </a>
+            </nav>
+          </header>
+
+          <main class="wrapper">
+              <h1>Welcome To John's Sports Shop</h1>
+      
+              <div class="card-container">
+                <div v-for="(product, i) in inventory.splice(0,9)" class="card">
+                  <div class="card-title">
+                    {{ product.name }}
+                  </div>
+                  <div class="card-body">
+                    <i class="icofont-10x icofont-{{ product.icon }}"></i>
+                    <form>
+                      
+                      <div class="row">
+                        <div class="cell">
+                          <label>Price:</label>
+                        </div>
+                        <div class="cell">
+                          ${{ product.price }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="cell">
+                          <label>Quantity:</label>
+                        </div>
+                        <div class="cell">
+                          <input type="number" v-model="quantity">
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-footer">
+                    <button @click="addToCart(product.name, i)" class="btn btn-light">
+                      Add to cart
+                    </button>
+                  </div>
+                </div>
+      
+              </div>
+          </main>
+
+          <!--allows cart sidebar to be accessed on this page. Can be used in any other added pages.-->
+          <sidebar
+            :cart="cart"
+            :inventory="inventory"
+          />
+
+          <footer>
+
+          </footer>
+
+        </div>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script>
+          let app = Vue.createApp({
+            data() {
+              return {
+                inventory: [],
+                cart: {
+                  
+                }
+              }
+            },
+            methods: {
+              addToCart(name, index) {
+                //receive the type and number of items for the cart
+                if (!this.cart[name]) this.cart[name] = 0
+                this.cart[name] += this.inventory[index].quantity
+                console.log(this.cart)
+              }
+            },
+            async mounted() {
+              const res = await fetch('./products.json')
+              const data = await res.json()
+              this.inventory = data
+              console.log(this.inventory)
+            }
+          })
+
+          app.component('sidebar', {
+            props: ['cart', 'inventory'],
+            computed: {
+              
+            },
+            methods: {
+              getPrice(name) {
+                const product = this.inventory.find((p) => {
+                  return p.name === name
+                })
+                return product.price
+              },
+              calculateTotal() {
+                const names = Object.keys(this.cart)
+                const total = Object.values(cart).reduce((accumulator, current, index) => {
+                  return accumulator + (current * this.getPrice(names[index]))
+                })
+                return total
+              }
+            },
+            template: `
+              <aside class="cart-container">
+              <div class="cart">
+                <h1 class="cart-title spread">
+                  <span>
+                    Cart
+                  </span>
+                </h1>
+      
+                <div class="cart-body">
+                  <table class="cart-table">
+                    <thead>
+                      <tr>
+                        <th><span class="sr-only">Product Image</span></th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th><span class="sr-only">Actions</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(quantity, key, i) in cart" :key="i">
+                        <td><i class="icofont-carrot icofont-3x"></i></td>
+                        <td>{{ key }}</td>
+                        <td>\${{ 9.99 }}</td>
+                        <td class="center">{{ quantity }}</td>
+                        <td>\${{ cart.footballs * 9.99 }}</td>
+                        <td class="center">
+                          <button class="btn btn-light cart-remove">
+                            &times;
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+      
+                  <p class="center"><em>No items in cart</em></p>
+                  <div class="spread">
+                    <span><strong>Total:</strong> \${{ }}</span>
+                    <div class="checkout">
+                      <button class="checkout-btn">Checkout</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+            `
+          })
+
+          app.mount('#app')
+        </script>
+    </body>
+</html>
